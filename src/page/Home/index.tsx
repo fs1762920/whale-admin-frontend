@@ -38,7 +38,7 @@ function getItem(
 
 const App: React.FC = () => {
   const [menuKey, setMenuKey] = useState("/index");
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
   const [titleShow, setTitleShow] = useState(true);
   const ref = useRef(null);
   const siderSize = useSize(ref);
@@ -113,7 +113,7 @@ const App: React.FC = () => {
         <Content>
           <Outlet />
         </Content>
-        <Footer>Whale Admin ©2023 Created by Whale</Footer>
+        <Footer>Whale-Admin ©2023 Created by Whale</Footer>
       </Layout>
     </Layout>
   );
