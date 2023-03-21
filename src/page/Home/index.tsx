@@ -106,7 +106,7 @@ const App: React.FC = () => {
           items={menuList}
         />
       </Sider>
-      <Layout>
+      <Layout className="layout-right">
         <Header>
           <WhaleHeader />
         </Header>

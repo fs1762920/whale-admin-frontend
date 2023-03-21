@@ -19,23 +19,97 @@
       font-size: 18px;
     }
   }
+  .ant-menu-root {
+    overflow-y: auto;
+    height: calc(100vh - 112px);
+    &:hover {
+      &::-webkit-scrollbar {
+        /*滚动条整体样式*/
+        width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
+        height: 1px;
+      }
+      &::-webkit-scrollbar-thumb {
+        /*滚动条里面小方块*/
+        border-radius: 6px;
+        background: #0a2844;
+      }
+      &::-webkit-scrollbar-track {
+        /*滚动条里面轨道*/
+        border-radius: 6px;
+        opacity: 0.1;
+      }
+    }
+    &::-webkit-scrollbar {
+      /*滚动条整体样式*/
+      width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
+      height: 1px;
+    }
+    &::-webkit-scrollbar-thumb {
+      /*滚动条里面小方块*/
+      border-radius: 6px;
+      background: #0a2844;
+    }
+    &::-webkit-scrollbar-track {
+      /*滚动条里面轨道*/
+      border-radius: 6px;
+      opacity: 0.1;
+    }
+  }
 }
 
-.ant-layout-header {
-  height: 64px;
-  background-color: rgb(255, 255, 255);
-  padding: 0 20px;
-}
+.layout-right {
+  position: relative;
+  height: 100vh;
+  overflow-y: auto;
+  .ant-layout-header {
+    height: 64px;
+    background-color: rgb(255, 255, 255);
+    padding: 0 20px;
+  }
 
-.ant-layout-content {
-  height: calc(100vh - 144px);
-  background-color: rgb(255, 255, 255);
-  margin: 20px 20px 0 20px;
-}
+  .ant-layout-content {
+    height: calc(100vh - 144px);
+    overflow-y: auto;
+    background-color: rgb(255, 255, 255);
+    margin: 20px 20px 0 20px;
+    &:hover {
+      &::-webkit-scrollbar {
+        /*滚动条整体样式*/
+        width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
+        height: 1px;
+      }
+      &::-webkit-scrollbar-thumb {
+        /*滚动条里面小方块*/
+        border-radius: 6px;
+        background: #dddddd;
+      }
+      &::-webkit-scrollbar-track {
+        /*滚动条里面轨道*/
+        border-radius: 6px;
+        background: #ffffff;
+      }
+    }
+    &::-webkit-scrollbar {
+      /*滚动条整体样式*/
+      width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
+      height: 1px;
+    }
+    &::-webkit-scrollbar-thumb {
+      /*滚动条里面小方块*/
+      border-radius: 6px;
+      background: #fff;
+    }
+    &::-webkit-scrollbar-track {
+      /*滚动条里面轨道*/
+      border-radius: 6px;
+      background: #ffffff;
+    }
+  }
 
-.ant-layout-footer {
-  padding: 0;
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
+  .ant-layout-footer {
+    padding: 0;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+  }
 }
