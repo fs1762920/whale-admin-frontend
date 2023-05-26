@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { Button, Form, Input, Select, Switch, Table, Space, Modal } from "antd";
+import { Button, Form, Input, Select, Switch, Table, Space, Modal, Popconfirm } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import {
   SearchOutlined,
@@ -25,8 +25,8 @@ const App: React.FC = () => {
   const [searchForm] = Form.useForm();
   const [dataForm] = Form.useForm();
 
-  const [modalShow, setModalShow] = useState(false);
-  const [modalTitle, setModalTitle] = useState('');
+  const [infoModalShow, setInfoModalShow] = useState(false);
+  const [infoModalTitle, setInfoModalTitle] = useState('');
 
   const stateList = [
     {
@@ -66,6 +66,31 @@ const App: React.FC = () => {
       phone: "18740670497",
       ctime: "2023-2-13 11:11:41",
       state: 1,
+    },
+  ];
+
+  
+  const roleList = [
+    {
+      roleId: 0,
+      roleName: "超级管理员",
+      roleCode: "admin",
+      state: 1,
+      ctime: "2023-2-13 11:11:41",
+    },
+    {
+      roleId: 1,
+      roleName: "用户管理员",
+      roleCode: "user_admin",
+      state: 1,
+      ctime: "2023-2-13 11:11:41",
+    },
+    {
+      roleId: 2,
+      roleName: "普通用户",
+      roleCode: "user",
+      state: 1,
+      ctime: "2023-2-15 01:22:52",
     },
   ];
 
@@ -124,40 +149,60 @@ const App: React.FC = () => {
       render: (record: any) => {
         return (
           <Space size="middle">
-            <Button type="link" icon={<EditOutlined />} size="small">
+            <Button type="link" icon={<EditOutlined />} size="small" onClick={() => switchDataModalShow(true, 1, record)}>
               修改
             </Button>
-            <Button type="link" icon={<UserSwitchOutlined />} size="small">
-              分配角色
-            </Button>
-            <Button type="link" icon={<ReloadOutlined />} size="small">
-              重置密码
-            </Button>
-            <Button type="link" icon={<DeleteOutlined />} size="small">
-              删除
-            </Button>
+            <Popconfirm
+              title="是否重置当前用户的密码？"
+              onConfirm={() => resetPassword(record.userId)}
+              okText="是"
+              cancelText="否"
+            >
+              <Button type="link" icon={<ReloadOutlined />} size="small">
+                重置密码
+              </Button>
+            </Popconfirm>
+            <Popconfirm
+              title="是否删除当前用户？"
+              onConfirm={() => deleteUser(record.userId)}
+              okText="是"
+              cancelText="否"
+            >
+              <Button type="link" icon={<DeleteOutlined />} size="small">
+                删除
+              </Button>
+            </Popconfirm>
           </Space>
         );
       },
     },
   ];
 
-  const switchModalShow = (show: boolean, model: number) => {
-    setModalShow(show);
+  const switchDataModalShow = (show: boolean, model: number, formData: any) => {
+    setInfoModalShow(show);
     if (model === 0) { // 新增
-      setModalTitle('新增用户信息')
+      setInfoModalTitle('新增用户信息')
     } else { // 修改
-      setModalTitle('修改用户信息')
+      setInfoModalTitle('修改用户信息')
+      dataForm.setFieldsValue(formData)
     }
   }
 
   const closeModal = () => {
-    setModalShow(false);
+    setInfoModalShow(false);
     resetDataForm();
   }
 
   const saveOrUpdate = (formData: any) => {
 
+  }
+
+  const deleteUser = (id: number) => {
+    console.log("deleteUser: ", id)
+  }
+
+  const resetPassword = (id: number) => {
+    console.log("resetPassword: ", id)
   }
 
   const renderState = () => {
@@ -167,15 +212,26 @@ const App: React.FC = () => {
     return <Select options={options} placeholder="用户状态" />;
   };
 
+  const renderRoleSelect = () => {
+    let options = roleList.map((option) => {
+      return { label: option.roleName, value: option.roleId };
+    })
+    return <Select options={options} placeholder="角色" />;
+  }
+
   const search = (formData: any) => {};
+
   const resetDataForm = () => {
     dataForm.resetFields()
   };
+
   const resetSearchForm = () => {
-    searchForm.resetFields()};
+    searchForm.resetFields()
+  };
+
   return (
     <>
-      <Modal title={modalTitle} open={modalShow} closable={true} onCancel={closeModal} footer={null}>
+      <Modal title={infoModalTitle} open={infoModalShow} closable={true} onCancel={closeModal} footer={null}>
         <Form
             form={dataForm}
             labelAlign="right"
@@ -197,6 +253,9 @@ const App: React.FC = () => {
             </Form.Item>
             <Form.Item name="phone" label="手机号码">
               <Input placeholder="手机号码" />
+            </Form.Item>
+            <Form.Item name="roleId" label="角色">
+              {renderRoleSelect()}
             </Form.Item>
             <Form.Item>
               <Button
@@ -255,7 +314,7 @@ const App: React.FC = () => {
       </div>
       <div className="table-area">
         <div className="operate-btn-group">
-          <Button type="dashed" icon={<PlusOutlined />} onClick = {() => switchModalShow(true, 0)}>
+          <Button type="dashed" icon={<PlusOutlined />} onClick = {() => switchDataModalShow(true, 0, null)}>
             新增
           </Button>
         </div>
