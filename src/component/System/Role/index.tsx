@@ -164,12 +164,6 @@ const App: React.FC = () => {
           <Button type="dashed" icon={<PlusOutlined />}>
             新增
           </Button>
-          <Button type="default" icon={<EditOutlined />}>
-            修改
-          </Button>
-          <Button type="primary" icon={<DeleteOutlined />} danger>
-            删除
-          </Button>
         </div>
         <div className="table-data">
           <Table dataSource={roleList} columns={columns} scroll={{ x: 1200 }} />

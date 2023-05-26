@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, Form, Input, Select, Switch, Table, Space } from "antd";
+import React, {useState} from "react";
+import { Button, Form, Input, Select, Switch, Table, Space, Modal } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import {
   SearchOutlined,
@@ -22,7 +22,11 @@ interface DataType {
 }
 
 const App: React.FC = () => {
-  const [form] = Form.useForm();
+  const [searchForm] = Form.useForm();
+  const [dataForm] = Form.useForm();
+
+  const [modalShow, setModalShow] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
 
   const stateList = [
     {
@@ -138,6 +142,24 @@ const App: React.FC = () => {
     },
   ];
 
+  const switchModalShow = (show: boolean, model: number) => {
+    setModalShow(show);
+    if (model === 0) { // 新增
+      setModalTitle('新增用户信息')
+    } else { // 修改
+      setModalTitle('修改用户信息')
+    }
+  }
+
+  const closeModal = () => {
+    setModalShow(false);
+    resetDataForm();
+  }
+
+  const saveOrUpdate = (formData: any) => {
+
+  }
+
   const renderState = () => {
     let options = stateList.map((option) => {
       return { label: option.stateName, value: option.state };
@@ -146,12 +168,53 @@ const App: React.FC = () => {
   };
 
   const search = (formData: any) => {};
-  const resetForm = () => {};
+  const resetDataForm = () => {
+    dataForm.resetFields()
+  };
+  const resetSearchForm = () => {
+    searchForm.resetFields()};
   return (
-    <div className="user-body">
+    <>
+      <Modal title={modalTitle} open={modalShow} closable={true} onCancel={closeModal} footer={null}>
+        <Form
+            form={dataForm}
+            labelAlign="right"
+            layout="vertical"
+            colon={false}
+            onFinish={saveOrUpdate}
+          >
+            <Form.Item name="nickName" label="名称">
+              <Input placeholder="用户名称" />
+            </Form.Item>
+            <Form.Item name="username" label="账号">
+              <Input placeholder="用户账号" />
+            </Form.Item>
+            <Form.Item name="password" label="密码">
+              <Input placeholder="用户密码" type="password" />
+            </Form.Item>
+            <Form.Item name="mail" label="邮箱">
+              <Input placeholder="邮箱" />
+            </Form.Item>
+            <Form.Item name="phone" label="手机号码">
+              <Input placeholder="手机号码" />
+            </Form.Item>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+              >
+                保存
+              </Button>
+              <Button onClick={resetDataForm}>
+                重置
+              </Button>
+            </Form.Item>
+        </Form>
+      </Modal>
+      <div className="user-body">
       <div className="search-condition">
         <Form
-          form={form}
+          form={searchForm}
           labelAlign="left"
           name="horizontal_login"
           colon={false}
@@ -183,7 +246,7 @@ const App: React.FC = () => {
               >
                 查询
               </Button>
-              <Button icon={<ReloadOutlined />} onClick={resetForm}>
+              <Button icon={<ReloadOutlined />} onClick={resetSearchForm}>
                 重置
               </Button>
             </Form.Item>
@@ -192,14 +255,8 @@ const App: React.FC = () => {
       </div>
       <div className="table-area">
         <div className="operate-btn-group">
-          <Button type="dashed" icon={<PlusOutlined />}>
+          <Button type="dashed" icon={<PlusOutlined />} onClick = {() => switchModalShow(true, 0)}>
             新增
-          </Button>
-          <Button type="default" icon={<EditOutlined />}>
-            修改
-          </Button>
-          <Button type="primary" icon={<DeleteOutlined />} danger>
-            删除
           </Button>
         </div>
         <div className="table-data">
@@ -207,6 +264,8 @@ const App: React.FC = () => {
         </div>
       </div>
     </div>
+    </>
+    
   );
 };
 
