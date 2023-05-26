@@ -314,6 +314,7 @@ const App: React.FC = () => {
             <Form.Item name="roleName">
               <Tree
                 checkable
+                defaultExpandAll={true}
                 checkedKeys={checkedSourceIds}
                 onCheck={checkSource}
                 fieldNames={{

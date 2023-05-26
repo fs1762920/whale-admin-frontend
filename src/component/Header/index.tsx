@@ -1,19 +1,33 @@
 import React, { useEffect, useState } from "react";
 import type { MenuProps } from 'antd';
-import { Button, Dropdown, Avatar, Modal, Form, Input } from "antd";
+import { Button, Dropdown, Avatar, Modal, Form, Input, Upload } from "antd";
+import {
+  LoadingOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import "./index.less";
 
 interface AppPropType {}
 
 const App: React.FC<AppPropType> = (props) => {
 
-  const [form] = Form.useForm();
+  const [passForm] = Form.useForm();
+  const [avatarForm] = Form.useForm();
   const [modal, contextHolder] = Modal.useModal();
 
 
   const [resetPassModalShow, setResetPassModalShow] = useState(false);
+  const [avatarModalShow, setAvatarModalShow] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const items: MenuProps['items'] = [
+    {
+      key: '0',
+      label: (
+        <div onClick={() => setAvatarModalShow(true)}>更换头像</div>
+      ),
+    },
     {
       key: '1',
       label: (
@@ -45,20 +59,62 @@ const App: React.FC<AppPropType> = (props) => {
     console.log("logout ... ")
   }
 
-  const closeModal = () => {
+  const closePassModal = () => {
     setResetPassModalShow(false)
-    form.resetFields()
+    passForm.resetFields()
   }
 
-  const resetForm = () => {
-    form.resetFields()
+  const closeAvatarModal = () => {
+    setAvatarModalShow(false)
+    avatarForm.resetFields()
   }
+
+  const resetPassForm = () => {
+    passForm.resetFields()
+  }
+
+  const uploadButton = (
+    <div>
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </div>
+  );
 
   return (
-    <>{contextHolder}
-      <Modal title="修改密码" open={resetPassModalShow} onCancel={closeModal} footer={null}>
+    <>
+      {contextHolder}
+      <Modal title="更换头像" open={avatarModalShow} onCancel={closeAvatarModal} footer={null}>
         <Form
-          form={form}
+          form={avatarForm}
+          labelAlign="right"
+          layout="vertical"
+          colon={false}
+          onFinish={save}
+        >
+          <Form.Item name="avatar">
+            <Upload
+              name="avatar"
+              listType="picture-card"
+              className="avatar-uploader"
+              showUploadList={false}
+              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+            >
+              {avatarUrl ? <img src={avatarUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+            </Upload>
+          </Form.Item>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+            >
+              保存
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+      <Modal title="修改密码" open={resetPassModalShow} onCancel={closePassModal} footer={null}>
+        <Form
+          form={passForm}
           labelAlign="right"
           layout="vertical"
           colon={false}
@@ -80,7 +136,7 @@ const App: React.FC<AppPropType> = (props) => {
             >
               保存
             </Button>
-            <Button onClick={resetForm}>
+            <Button onClick={resetPassForm}>
               重置
             </Button>
           </Form.Item>
